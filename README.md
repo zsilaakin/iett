@@ -1,18 +1,19 @@
-# 🚍 İETT Driver Risk Scoring Project
+# 🚍 IETT Driver Risk Scoring Project
 
-Bu proje, İETT stajı kapsamında sürücü davranışlarının analiz edilmesi ve gelecekte sürücü risk puanlama modeli oluşturulabilmesi amacıyla geliştirilmiştir.
+This project was developed during my internship at **IETT Information Technologies Department** to analyze driver behavior using Driver Monitoring System (DSM) alarms and vehicle telemetry data.
 
-Proje kapsamında Dahua DSM (Driver Monitoring System) alarm kayıtları ile araç telemetri verileri eşleştirilmiş, sürücü bazlı özellikler (features) üretilmiş ve keşifsel veri analizi (EDA) çalışmaları gerçekleştirilmiştir.
+The project matches DSM alarms with drivers, generates driver-based behavioral features, enriches them with telemetry information, and produces a driver risk score that can support safe driving analysis.
 
 ---
 
-# 🎯 Project Goal
+# 🎯 Project Goals
 
-- DSM alarm kayıtlarını sürücü bilgileri ile eşleştirmek
-- Sürücü bazında feature engineering yapmak
-- Alarm dağılımlarını analiz etmek
-- Telemetri verileri ile yeni özellikler üretmek
-- Güvenli sürüşü değerlendirebilecek Driver Risk Score altyapısını oluşturmak
+- Match DSM alarms with driver information
+- Generate driver-based behavioral features
+- Enrich alarm data with telemetry features
+- Calculate a Driver Risk Score
+- Classify drivers according to risk level
+- Produce interpretable risk analysis for each driver
 
 ---
 
@@ -29,7 +30,7 @@ Proje kapsamında Dahua DSM (Driver Monitoring System) alarm kayıtları ile ara
 
 # 📂 Project Structure
 
-```
+```text
 iett
 │
 ├── queries/
@@ -42,86 +43,137 @@ iett
 │   ├── match_dahua_dsm_driver.py
 │   ├── match_kts_driver.py
 │   ├── build_driver_features.py
-│   └── analyze_driver_features.py
+│   ├── build_driver_analysis.py
+│   └── build_driver_score.py
 │
 ├── outputs/
-│   ├── plots/
 │   ├── csv/
-│   └── excel/
+│   ├── excel/
+│   └── plots/
 │
 ├── db.py
 ├── config.py
-└── requirements.txt
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
 # 🔄 Data Pipeline
 
-```
+```text
 DSM Alarms
       │
       ▼
 Driver Matching
-(match_dahua_dsm_driver.py)
-      │
-      ▼
-dahua_dsm_alarms_driver_test
-      │
-      ▼
-Feature Engineering
-(build_driver_features.py)
       │
       ▼
 driver_features_test
       │
       ▼
-Exploratory Data Analysis
-(analyze_driver_features.py)
+Telemetry Feature Engineering
+      │
+      ▼
+driver_analysis_test
+      │
+      ▼
+Risk Scoring
+      │
+      ▼
+driver_score_test
 ```
 
 ---
 
-# 📊 Current Features
+# 📊 Driver Features
+
+### DSM Features
 
 - Total Alarm Count
-- Head Down Alarm
-- Seatbelt Alarm
-- Eye Closure Alarm
-- Phone Call Alarm
-- Lane Departure Alarm
-- Driver Leave Seat Alarm
-- Yawning Alarm
-- Close Distance Warning
-- Looking Around Alarm
-- Infrared Blocking Glasses Alarm
-- Smoking Alarm
+- Head Down
+- Eye Closure
+- Phone Call
+- Looking Around
+- Lane Departure
+- Seatbelt
+- Leave Seat
+- Yawning
+- Close Distance
+- Smoking
+- Infrared Blocking Glasses
+
+### Telemetry Features
+
+- Average Vehicle Speed
+- Maximum Vehicle Speed
+- Speed Standard Deviation
+- Speeding Events (>70 km/h)
+- Total Telemetry Records
+- Alarm Per Hour
 
 ---
 
-# 🚧 Planned Features
+# ⚠️ Driver Risk Scoring
 
-- Working Hours
-- Total Distance
-- Average Speed
-- Maximum Speed
-- Speed >70 km/h Detection
+The risk scoring model combines weighted DSM alarm counts and speeding events.
+
+Each alarm type is assigned a different weight according to its impact on driving safety.
+
+The calculated raw score is normalized into a **0–100 Driver Risk Score** using Min-Max Scaling.
+
+Drivers are classified into four categories:
+
+- LOW
+- MEDIUM
+- HIGH
+- CRITICAL
+
+For interpretability, the three most influential risk factors are also reported:
+
+- TOP_RISK_REASON_1
+- TOP_RISK_REASON_2
+- TOP_RISK_REASON_3
+
+---
+
+# 📈 Outputs
+
+The project automatically generates:
+
+### ClickHouse Tables
+
+- driver_features_test
+- driver_analysis_test
+- driver_score_test
+
+### Excel Reports
+
+- driver_analysis.xlsx
+- driver_score.xlsx
+
+---
+
+# 📊 Example Output
+
+The generated risk report contains:
+
+- Driver Name
+- Risk Score (0–100)
+- Risk Level
+- Top 3 Risk Reasons
+- Telemetry Features
+- DSM Alarm Features
+
+---
+
+# 🚀 Future Improvements
+
+- Distance-based normalization
 - Harsh Braking Detection
 - Harsh Acceleration Detection
-- Driver Risk Score
-- Risk Level Classification
-
----
-
-# 📈 Current Analysis
-
-- Driver-based alarm distributions
-- Top risky drivers
-- Alarm correlations
-- Alarm density analysis
-- Outlier detection
-- Alarm percentage distributions
-- Visualization of driver behavior
+- Rolling-window driver analysis
+- Machine Learning based risk prediction
+- Interactive dashboard (Power BI / Streamlit)
 
 ---
 
@@ -131,4 +183,4 @@ Exploratory Data Analysis
 
 Computer Engineering Student
 
-Intern @ İETT Information Technologies Department
+Intern @ IETT Information Technologies Department
