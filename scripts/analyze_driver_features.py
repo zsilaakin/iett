@@ -21,6 +21,9 @@ sys.path.append(str(BASE_DIR))
 PLOT_DIR = BASE_DIR / "outputs" / "plots"
 PLOT_DIR.mkdir(parents=True, exist_ok=True)
 
+EXCEL_DIR = BASE_DIR / "outputs" / "excel"
+EXCEL_DIR.mkdir(parents=True, exist_ok=True)
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -338,3 +341,46 @@ print("\nOluşturulan grafikler:")
 
 for file in PLOT_DIR.glob("*.png"):
     print(f"  ✓ outputs/plots/{file.name}")
+
+
+##############
+
+print("\n" + "=" * 60)
+print("EXCEL RAPORU OLUŞTURULUYOR")
+print("=" * 60)
+
+with pd.ExcelWriter(EXCEL_DIR / "eda_summary.xlsx") as writer:
+
+    top20.to_excel(
+        writer,
+        sheet_name="Top20 Drivers",
+        index=False
+    )
+
+    alarm_percent.sort_values(
+        ascending=False
+    ).to_frame("Percentage").to_excel(
+        writer,
+        sheet_name="Alarm Percentages"
+    )
+
+    corr.round(2).to_excel(
+        writer,
+        sheet_name="Correlation Matrix"
+    )
+
+    df["ALARM_GROUP"].value_counts().sort_index().to_frame(
+        "Driver Count"
+    ).to_excel(
+        writer,
+        sheet_name="Alarm Density"
+    )
+
+    outliers.to_excel(
+        writer,
+        sheet_name="Outliers",
+        index=False
+    )
+
+print("✓ Excel raporu oluşturuldu.")
+print(f"Konum: {EXCEL_DIR / 'eda_summary.xlsx'}")

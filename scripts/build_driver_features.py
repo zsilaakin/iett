@@ -24,6 +24,9 @@ sys.path.append(str(BASE_DIR))
 
 from db import client
 import pandas as pd
+
+EXCEL_DIR = BASE_DIR / "outputs" / "excel"
+EXCEL_DIR.mkdir(parents=True, exist_ok=True)
 # ======================================================
 # Veriyi Çek
 # ======================================================
@@ -147,3 +150,40 @@ client.insert_df(
 )
 
 print("\nVeriler başarıyla yazıldı.")
+
+
+##########
+
+# ======================================================
+# Excel'e Kaydet
+# ======================================================
+
+# ======================================================
+# Excel'e Kaydet
+# ======================================================
+
+with pd.ExcelWriter(EXCEL_DIR / "driver_features.xlsx") as writer:
+
+    driver_features.to_excel(
+        writer,
+        sheet_name="Driver Features",
+        index=False
+    )
+
+    pd.DataFrame({
+        "Metric": [
+            "Driver Count",
+            "Alarm Type Count"
+        ],
+        "Value": [
+            len(driver_features),
+            len(expected_cols)
+        ]
+    }).to_excel(
+        writer,
+        sheet_name="Summary",
+        index=False
+    )
+
+print("\n✓ Excel dosyası oluşturuldu.")
+print(f"Konum: outputs/excel/driver_features.xlsx")

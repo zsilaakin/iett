@@ -229,6 +229,14 @@ def main():
     print(f"DB Kolon Sayısı      : {len(table_columns)}")
     print(f"DataFrame Kolon Sayısı : {len(result.columns)}")
 
+
+
+    print("Eski tablo temizleniyor...")
+
+    client.command("""
+    TRUNCATE TABLE telemetri_data_warehouse_test.dahua_dsm_alarms_driver_test
+    """)
+
     client.insert_df(
         "telemetri_data_warehouse_test.dahua_dsm_alarms_driver_test",
         result
